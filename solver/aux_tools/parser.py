@@ -834,7 +834,7 @@ class InverseParserM2F:
                     attr = items[0][0]
                 else:
                     attr = attr + "(" + "".join(items[0]) + ")"
-                return "Equal({},{})".format(attr, str(problem.condition.value_of_sym[syms[0]]).replace(" ", ""))
+                return "Value({},{})".format(attr, str(problem.condition.value_of_sym[syms[0]]).replace(" ", ""))
         elif len(syms) == 2 and (item == (syms[0] - syms[1]) or item == (syms[1] - syms[0])):
             attr1, items1 = problem.condition.attr_of_sym[syms[0]]
             if attr1 == "Free":
@@ -846,7 +846,9 @@ class InverseParserM2F:
                 attr2 = items2[0][0]
             else:
                 attr2 = attr2 + "(" + "".join(items2[0]) + ")"
-            return "Equal({},{})".format(attr1, attr2)
+            if item == (syms[0] - syms[1]):
+                return "Equal({},{})".format(attr1, attr2)
+            return "Equal({},{})".format(attr2, attr1)
 
         return "Equation" + "(" + str(item).replace(" ", "") + ")"
 
