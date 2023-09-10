@@ -1,7 +1,7 @@
 import os
 
-from core.API import ForwardEnvironment
-from core.aux_tools.utils import load_json
+from Agent import ForwardEnvironment
+from solver.aux_tools.utils import load_json
 import warnings
 
 path_preset = "../../data/preset/"
@@ -9,7 +9,7 @@ path_formalized = "../../data/formalized-problems/"
 warnings.filterwarnings("ignore")
 
 env = ForwardEnvironment(load_json(path_preset + "predicate_GDL.json"),  # init solver
-                     load_json(path_preset + "theorem_GDL.json"))
+                         load_json(path_preset + "theorem_GDL.json"))
 
 pid = 1584
 filename = "{}.json".format(pid)
@@ -33,6 +33,3 @@ for action in env.get_legal_moves():
         if env.get_state() not in d:
             env.node = d[state]
             break
-
-
-

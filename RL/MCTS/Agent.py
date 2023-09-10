@@ -1,17 +1,13 @@
 import copy
-
 import numpy as np
-
-from core.problem.problem import Problem
-from core.aux_tools.parser import InverseParser as IvParser
-from core.solver.engine import GeometryPredicateLogic as GeoLogic
-from core.aux_tools.utils import *
-from core.aux_tools.output import *
-from core.aux_tools.parser import FormalLanguageParser as FLParser
-from core.solver.engine import EquationKiller as EqKiller
-from core.solver.fw_search import Theorem
+from solver.problem.problem import Problem
+from solver.aux_tools.parser import InverseParserM2F
+from solver.core.engine import GeometryPredicateLogic as GeoLogic
+from solver.aux_tools.utils import load_json, save_json
+from solver.aux_tools.output import *
+from solver.aux_tools.parser import GDLParser, CDLParser
+from solver.core.engine import EquationKiller as EqKiller
 import warnings
-from core.aux_tools.parser import EquationParser as EqParser
 
 
 def splitTheorem():
@@ -35,8 +31,7 @@ class TBranch:
 
 
 class Node:
-    def __init__(self, father, problem, state2node, theorem_GDL,
-                 theorem_path='../Encoder/theorem_sort.json'):
+    def __init__(self, father, problem, state2node, theorem_GDL, theorem_path='../Encoder/theorem_sort.json'):
         self.problem = problem  # instance of class <Problem>
         self.state = None  # tuple of <str>
         self.legal_moves = None  # [(t_name, t_para, t_branch)]
@@ -84,11 +79,11 @@ class Node:
             oppose = False
             if "~" in equal:
                 oppose = True
-            eq = EqParser.get_equation_from_tree(self.problem, item, True, letters)
+            eq = CDLParser.get_equation_from_tree(self.problem, item, True, letters)
             solved_eq = False
 
             result, premise = EqKiller.solve_target(eq, self.problem)
-            if result is not None and rough_equal(result, 0):
+            if result is not None and result == 0:
                 solved_eq = True
 
             for i in range(len(self.conclusions[t_msg])):
@@ -98,7 +93,7 @@ class Node:
                 self.probs[t_msg] = 0
                 return False, None
 
-        theorem = IvParser.inverse_parse_logic(t_name, t_para, self.theorem_GDL[t_name]["para_len"])
+        theorem = InverseParserM2F.inverse_parse_logic(t_name, t_para, self.theorem_GDL[t_name]["para_len"])
         child_problem = Problem()
         child_problem.load_problem_by_copy(self.problem)
         for predicate, item, premise in self.conclusions[t_msg]:
@@ -121,7 +116,7 @@ class Node:
             return self.state
 
         self.state = []
-        anti_parsed_cdl = InverseParser.inverse_parse_logic_to_cdl(self.problem)
+        anti_parsed_cdl = InverseParserM2F.inverse_parse_logic_to_cdl(self.problem)
         for step in anti_parsed_cdl:
             for cdl in anti_parsed_cdl[step]:
                 self.state.append(cdl)
@@ -137,7 +132,7 @@ class Node:
         self.legal_moves = []
         self.conclusions = {}
         for t_name in self.theorem_GDL:
-            if t_name.endswith("definition") or Theorem.t_msg[t_name][1] == 0 or Theorem.t_msg[t_name][0] == 3:
+            if t_name.endswith("definition"):
                 continue
 
             for t_branch in self.theorem_GDL[t_name]["body"]:
@@ -201,8 +196,8 @@ class Node:
 class ForwardEnvironment:
     def __init__(self, predicate_GDL, theorem_GDL):
         """Initialize Environment."""
-        self.predicate_GDL = FLParser.parse_predicate(predicate_GDL)
-        self.theorem_GDL = FLParser.parse_theorem(theorem_GDL, self.predicate_GDL)
+        self.predicate_GDL = GDLParser.parse_predicate_gdl(predicate_GDL)
+        self.theorem_GDL = GDLParser.parse_theorem_gdl(theorem_GDL, self.predicate_GDL)
         self.state2node = {}
         self.root = None
         self.node = None
@@ -210,7 +205,7 @@ class ForwardEnvironment:
 
     def init_root(self, problem_CDL):
         problem = Problem()
-        problem.load_problem_by_fl(self.predicate_GDL, FLParser.parse_problem(problem_CDL))
+        problem.load_problem_by_fl(self.predicate_GDL, CDLParser.parse_problem(problem_CDL))
         EqKiller.solve_equations(problem)
         problem.step("init_problem", 0)
 
@@ -320,7 +315,7 @@ class TreeAgent:
     # 创建game_state的节点
 
 
-if __name__ == '__main__':
+def main():
     path_preset = "../../data/preset/"
     path_formalized = "../../data/formalized-problems/"
     warnings.filterwarnings("ignore")
@@ -335,6 +330,10 @@ if __name__ == '__main__':
     for theorem in env.node.branches:
         print(theorem)
         for param in env.node.branches[theorem].pbranches:
-            print(param,end=' ')
+            print(param, end=' ')
         print()
     # print(env.get_legal_moves())
+
+
+if __name__ == '__main__':
+    main()

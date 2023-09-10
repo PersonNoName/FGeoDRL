@@ -3,8 +3,8 @@ import os
 import re
 import warnings
 
-from core.API import ForwardEnvironment
-from core.aux_tools.utils import load_json
+from MCTS.Agent import ForwardEnvironment
+from solver.aux_tools.utils import load_json
 import numpy as np
 from Utils.theorem_seq import get_theorem_seq
 from Encoder import splitGoal
