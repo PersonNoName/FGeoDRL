@@ -1,0 +1,23 @@
+{
+  "ac": "AreaOfCircle",
+  "aq": "AreaOfQuadrilateral",
+  "as": "AreaOfSector",
+  "at": "AreaOfTriangle",
+  "dc": "DiameterOfCircle",
+  "hq": "HeightOfQuadrilateral",
+  "ht": "HeightOfTriangle",
+  "la": "LengthOfArc",
+  "ll": "LengthOfLine",
+  "ma": "MeasureOfAngle",
+  "mar": "MeasureOfArc",
+  "pc": "PerimeterOfCircle",
+  "pq": "PerimeterOfQuadrilateral",
+  "ps": "PerimeterOfSector",
+  "pt": "PerimeterOfTriangle",
+  "rc": "RadiusOfCircle",
+  "rmq": "RatioOfMirrorSimilarQuadrilateral",
+  "rmt": "RatioOfMirrorSimilarTriangle",
+  "rsa": "RatioOfSimilarArc",
+  "rsq": "RatioOfSimilarQuadrilateral",
+  "rst": "RatioOfSimilarTriangle"
+}

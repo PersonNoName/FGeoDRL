@@ -1,0 +1,21 @@
+[
+  "AreaOfQuadrilateral",
+  "AreaOfTriangle",
+  "AreaOfSector",
+  "AreaOfCircle",
+  "LengthOfLine",
+  "LengthOfArc",
+  "MeasureOfAngle",
+  "MeasureOfArc",
+  "PerimeterOfTriangle",
+  "PerimeterOfCircle",
+  "PerimeterOfQuadrilateral",
+  "ParallelBetweenLine",
+  "RatioOfSimilarQuadrilateral",
+  "RatioOfSimilarTriangle",
+  "RatioOfMirrorSimilarTriangle",
+  "HeightOfTriangle",
+  "HeightOfQuadrilateral",
+  "RadiusOfCircle",
+  "DiameterOfCircle"
+]
