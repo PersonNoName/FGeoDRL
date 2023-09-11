@@ -1,6 +1,6 @@
 import os
 
-from Agent import ForwardEnvironment
+from agent import ForwardEnvironment
 from solver.aux_tools.utils import load_json
 import warnings
 

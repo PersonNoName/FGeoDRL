@@ -3,7 +3,7 @@ import os
 import re
 import warnings
 
-from MCTS.Agent import ForwardEnvironment
+from MCTS.agent import ForwardEnvironment
 from solver.aux_tools.utils import load_json
 import numpy as np
 from Utils.theorem_seq import get_theorem_seq
