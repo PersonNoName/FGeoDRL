@@ -22,6 +22,10 @@ class SNode:
         self.state = None  # current problem state
         self.solved = None  # indicates whether the problem has been solved
 
+        self.simulate = True
+        self.s_prior = 0  # probability of selecting the current node
+        self.s_visits = 0  # number of visits to the current node
+        self.s_value = 0  # evaluation value of the current node
         self.prior = 0  # probability of selecting the current node
         self.visits = 0  # number of visits to the current node
         self.value = 0  # evaluation value of the current node
@@ -61,16 +65,12 @@ class SNode:
                         else:
                             self.children[(t_name, t_branch)].append(t_para)
 
-        t_node_prior = 1 / len(self.children)
         for t_name_and_branch in self.children:
             t_node = TNode(self, t_name_and_branch)
-            t_node.prior = t_node_prior
 
             t_node.children = {}
-            p_node_prior = 1 / len(self.children[t_name_and_branch])
             for t_para in self.children[t_name_and_branch]:
                 p_node = PNode(t_node, t_para)
-                p_node.prior = p_node_prior
                 t_node.children[t_para] = p_node  # add p_node
 
             self.children[t_name_and_branch] = t_node  # add t_node
@@ -130,6 +130,10 @@ class TNode:
         self.t_name_and_branch = t_name_and_branch  # tuple('t_name', 't_branch')
         self.children = None  # <dict>, {'t_para': <PNode>}
 
+        self.simulate = True
+        self.s_prior = 0  # probability of selecting the current node
+        self.s_visits = 0  # number of visits to the current node
+        self.s_value = 0  # evaluation value of the current node
         self.prior = 0  # probability of selecting the current node
         self.visits = 0  # number of visits to the current node
         self.value = 0  # evaluation value of the current node
@@ -213,6 +217,10 @@ class PNode:
         self.t_para = t_para    # <str>
         self.child = None  # <SNode> or None
 
+        self.simulate = True
+        self.s_prior = 0  # probability of selecting the current node
+        self.s_visits = 0  # number of visits to the current node
+        self.s_value = 0  # evaluation value of the current node
         self.prior = 0  # probability of selecting the current node
         self.visits = 0  # number of visits to the current node
         self.value = 0  # evaluation value of the current node
@@ -244,7 +252,6 @@ class ForwardEnvironment:
         """Back to the root node."""
         if self.node != self.root:
             self.node = self.root
-            self.node.visits += 1
 
     def step(self, move=None):
         """
@@ -259,7 +266,6 @@ class ForwardEnvironment:
 
         if stepped:
             self.node = child
-            self.node.visits += 1
 
         return stepped
 
