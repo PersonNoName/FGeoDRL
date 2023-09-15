@@ -1,13 +1,13 @@
-from solver.problem.condition import Condition, Goal
-from solver.aux_tools.parser import CDLParser
-from solver.aux_tools.utils import rough_equal
-from solver.core.engine import EquationKiller as EqKiller
 import warnings
 from itertools import combinations
 from sympy import symbols
 import copy
 import time
 from func_timeout import FunctionTimedOut
+from solver.problem.condition import Condition, Goal
+from solver.aux_tools.parser import CDLParser
+from solver.aux_tools.utils import rough_equal
+from solver.core.engine import EquationKiller as EqKiller
 
 
 class Problem:
@@ -431,7 +431,7 @@ class Problem:
         if not skip_check and not self.check(predicate, item, premise, theorem):
             return False
 
-        added, _id = self.condition.add(predicate, item, tuple(premise), theorem)
+        added, _id = self.condition.add(predicate, item, premise, theorem)
         if added:
             if predicate == "Equation":  # preset Equation
                 return True
